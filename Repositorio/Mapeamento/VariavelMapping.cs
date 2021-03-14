@@ -16,6 +16,8 @@ namespace Repositorio.Mapeamento
             builder.Property(x => x.Nome).HasColumnName("NOME").HasColumnType("VARCHAR(50)").IsRequired().HasMaxLength(50);
             builder.Property(x => x.Objetivo).HasColumnName("OBJETIVO").HasColumnType("BIT");
             builder.HasMany(x => x.Valores).WithOne(x => x.Variavel).HasForeignKey(x => x.IdVariavel);
+            builder.HasMany(x => x.RegrasVariavel).WithOne(x => x.Variavel).HasForeignKey(x => x.IdVariavel);
+            builder.HasMany(x => x.Regras).WithOne(x => x.VariavelObjetivo).HasForeignKey(x => x.IdVariavelObjetivo);
         }
     }
 }
