@@ -1,0 +1,46 @@
+﻿@page "/escola/aluno-disciplina"
+@using Apresentation.ViewModels.AlunoDisciplinaViewModel
+
+<Apresentation.Pages.Atividade01_Escola.Base.Index  Tela="Disciplinas do Aluno"/>
+
+<div hidden="@HiddenFormularioAdicionar">
+    <FormAddAlunoDisciplina OnRefreshList="RefreshListagem" />
+</div>
+@if (AlunoDisciplina != null)
+{
+    <div hidden="@HiddenFormularioAtualizar">
+        <FormUpdateAlunoDisciplina OnCancel="CallFormularioAdicionar" AlunoDisciplina="AlunoDisciplina" OnRefreshList="RefreshListagem" />
+    </div>
+}
+<div>
+    <ListAlunoDisciplina CallFormUpdate="CallFormularioAtualizar" Atualizar="AtualizarListagem" />
+</div>
+
+@code {
+    private bool AtualizarListagem;
+    private string HiddenFormularioAdicionar = null;
+    private string HiddenFormularioAtualizar = "hidden";
+    private AlunoDisciplinaGetViewModel AlunoDisciplina = null;
+
+    private void RefreshListagem()
+    {
+        AtualizarListagem = !AtualizarListagem;
+        StateHasChanged();
+    }
+
+    private void CallFormularioAdicionar()
+    {
+        AlunoDisciplina = null;
+        HiddenFormularioAdicionar = null;
+        HiddenFormularioAtualizar = "hidden";
+        StateHasChanged();
+    }
+
+    private void CallFormularioAtualizar(AlunoDisciplinaGetViewModel disciplina)
+    {
+        AlunoDisciplina = disciplina;
+        HiddenFormularioAtualizar = null;
+        HiddenFormularioAdicionar = "hidden";
+        StateHasChanged();
+    }
+}

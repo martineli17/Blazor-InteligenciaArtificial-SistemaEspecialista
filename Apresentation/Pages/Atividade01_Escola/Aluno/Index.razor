@@ -1,0 +1,47 @@
+﻿@page "/escola/aluno"
+@using Apresentation.ViewModels.AlunoViewModel
+
+<Apresentation.Pages.Atividade01_Escola.Base.Index  Tela="Aluno"/>
+
+<div hidden="@HiddenFormularioAdicionar">
+    <FormAddAluno OnRefreshList="RefreshListagem" />
+</div>
+@if (AlunoAtualizar != null)
+{
+    <div hidden="@HiddenFormularioAtualizar">
+        <FormUpdateAluno OnCancel="CallFormularioAdicionar" Aluno="AlunoAtualizar" OnRefreshList="RefreshListagem" />
+    </div>
+}
+<div>
+    <ListAlunos CallFormUpdate="CallFormularioAtualizar" Atualizar="AtualizarListagem" />
+</div>
+
+
+@code {
+    private bool AtualizarListagem;
+    private string HiddenFormularioAdicionar = null;
+    private string HiddenFormularioAtualizar = "hidden";
+    private AlunoGetViewModel AlunoAtualizar = null;
+
+    private void RefreshListagem()
+    {
+        AtualizarListagem = !AtualizarListagem;
+        StateHasChanged();
+    }
+
+    private void CallFormularioAdicionar()
+    {
+        AlunoAtualizar = null;
+        HiddenFormularioAdicionar = null;
+        HiddenFormularioAtualizar = "hidden";
+        StateHasChanged();
+    }
+
+    private void CallFormularioAtualizar(AlunoGetViewModel aluno)
+    {
+        AlunoAtualizar = aluno;
+        HiddenFormularioAtualizar = null;
+        HiddenFormularioAdicionar = "hidden";
+        StateHasChanged();
+    }
+}

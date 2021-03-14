@@ -1,0 +1,47 @@
+﻿@page "/banco/cliente"
+@using Apresentation.ViewModels.ClienteViewModel
+
+<Apresentation.Pages.Atividade02_Banco.Base.Index Tela="Cliente"/>
+
+<div hidden="@HiddenFormularioAdicionar">
+    <FormAddCliente OnRefreshList="RefreshListagem" />
+</div>
+@if (ClienteAtualizar != null)
+{
+    <div hidden="@HiddenFormularioAtualizar">
+        <FormUpdateCliente OnCancel="CallFormularioAdicionar" Cliente="ClienteAtualizar" OnRefreshList="RefreshListagem" />
+    </div>
+}
+<div>
+    <ListClientes CallFormUpdate="CallFormularioAtualizar" Atualizar="AtualizarListagem" />
+</div>
+
+
+@code {
+    private bool AtualizarListagem;
+    private string HiddenFormularioAdicionar = null;
+    private string HiddenFormularioAtualizar = "hidden";
+    private ClienteGetViewModel ClienteAtualizar = null;
+
+    private void RefreshListagem()
+    {
+        AtualizarListagem = !AtualizarListagem;
+        StateHasChanged();
+    }
+
+    private void CallFormularioAdicionar()
+    {
+        ClienteAtualizar = null;
+        HiddenFormularioAdicionar = null;
+        HiddenFormularioAtualizar = "hidden";
+        StateHasChanged();
+    }
+
+    private void CallFormularioAtualizar(ClienteGetViewModel aluno)
+    {
+        ClienteAtualizar = aluno;
+        HiddenFormularioAtualizar = null;
+        HiddenFormularioAdicionar = "hidden";
+        StateHasChanged();
+    }
+}

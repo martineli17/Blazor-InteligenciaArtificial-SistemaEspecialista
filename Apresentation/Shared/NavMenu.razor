@@ -1,0 +1,98 @@
+﻿<style>
+    .nav-link{
+        cursor: pointer;
+    }
+</style>
+
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Trabalho Acadêmico</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="ToggleNavMenuEscola">
+                <span class="oi oi-book" aria-hidden="true"></span> Escola | Atividade 01
+            </NavLink>
+            <ul class="nav flex-column" hidden="@NavMenuEscola">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="escola/curso" Match="NavLinkMatch.All">
+                        <span class="oi oi-chevron-right"></span> Curso
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="escola/disciplina" Match="NavLinkMatch.All">
+                        <span class="oi oi-chevron-right"></span> Disciplina
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="escola/aluno" Match="NavLinkMatch.All">
+                        <span class="oi oi-chevron-right"></span> Aluno
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="escola/aluno-disciplina" Match="NavLinkMatch.All">
+                        <span class="oi oi-chevron-right"></span> Disciplinas do aluno
+                    </NavLink>
+                </li>
+            </ul>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="ToggleNavMenuBanco">
+                <span class="oi oi-dollar" aria-hidden="true"></span> Banco | Atividade 02
+            </NavLink>
+            <ul class="nav flex-column" hidden="@NavMenuBanco">
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="banco/cliente" Match="NavLinkMatch.All">
+                        <span class="oi oi-chevron-right"></span> Cliente
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" @onclick="ToggleNavMenuBancoConta">
+                        <span class="oi oi-chevron-right"></span> Conta
+                    </NavLink>
+                    <ul hidden="@NavMenuBancoConta" class="nav flex-column">
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="banco/conta" Match="NavLinkMatch.All">
+                                <span class="oi oi-ellipses"></span> Cadastrar
+                            </NavLink>
+                        </li>
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="banco/conta/operacoes" Match="NavLinkMatch.All">
+                                <span class="oi oi-ellipses"></span> Operações
+                            </NavLink>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+    private bool collapseNavMenuEscola = true;
+    private bool collapseNavMenuBanco = true;
+    private bool collapseNavMenuBancoConta = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private string NavMenuEscola => collapseNavMenuEscola ? "hidden" : null;
+    private string NavMenuBanco => collapseNavMenuBanco ? "hidden" : null;
+    private string NavMenuBancoConta => collapseNavMenuBancoConta ? "hidden" : null;
+
+    private void ToggleNavMenu() => collapseNavMenu = !collapseNavMenu;
+
+    private void ToggleNavMenuEscola() => collapseNavMenuEscola = !collapseNavMenuEscola;
+
+    private void ToggleNavMenuBanco() => collapseNavMenuBanco = !collapseNavMenuBanco;
+
+    private void ToggleNavMenuBancoConta() => collapseNavMenuBancoConta = !collapseNavMenuBancoConta;
+}
