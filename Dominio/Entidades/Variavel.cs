@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Dominio.Entidades
 {
-    public class Variavel : Base
+    public class Variavel : BaseProjeto
     {
-        public string Nome { get; init; }
-        public bool Objetivo { get; init; }
-        public string Pergunta { get; init; }
-        public string MotivoPergunta { get; init; }
-        public IEnumerable<ValoresVariavel> Valores { get; init; }
-        public IEnumerable<RegraVariavel> RegrasVariavel { get; init; }
-        public IEnumerable<Regra> Regras { get; init; }
+        public string Nome { get; set; }
+        public bool Objetivo { get; set; }
+        public string Pergunta { get; set; }
+        public string MotivoPergunta { get; set; }
+        public IEnumerable<ValoresVariavel> Valores { get; set; }
+        public IEnumerable<RegraVariavel> RegrasVariavel { get; set; }
+        public IEnumerable<Regra> Regras { get; set; }
     }
 }

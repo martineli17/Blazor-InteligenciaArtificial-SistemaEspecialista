@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositorio", "Repositorio\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crosscuting", "Crosscuting\Crosscuting.csproj", "{C27A9B75-9A0B-4A03-83C6-16D8DFF9718C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Apresentation", "Apresentation\Apresentation.csproj", "{6A42FE95-03C2-411D-B65B-8FD4C932D547}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{A2A30AF8-A546-436C-A203-7B6EE48D6BE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{C27A9B75-9A0B-4A03-83C6-16D8DFF9718C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C27A9B75-9A0B-4A03-83C6-16D8DFF9718C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C27A9B75-9A0B-4A03-83C6-16D8DFF9718C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A42FE95-03C2-411D-B65B-8FD4C932D547}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A42FE95-03C2-411D-B65B-8FD4C932D547}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A42FE95-03C2-411D-B65B-8FD4C932D547}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A42FE95-03C2-411D-B65B-8FD4C932D547}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2A30AF8-A546-436C-A203-7B6EE48D6BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2A30AF8-A546-436C-A203-7B6EE48D6BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2A30AF8-A546-436C-A203-7B6EE48D6BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2A30AF8-A546-436C-A203-7B6EE48D6BE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

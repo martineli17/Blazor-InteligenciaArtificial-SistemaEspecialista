@@ -1,0 +1,18 @@
+﻿@if (Descricao != null)
+{
+    <div class="card">
+        <div class="card-header justify-content-center">
+            Dados do projeto
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">@Autor</h5>
+            <p class="card-text">@Descricao</p>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter] public string Descricao { get; set; }
+    [Parameter] public string Autor { get; set; }
+}

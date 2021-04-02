@@ -2,10 +2,10 @@
 
 namespace Dominio.Entidades
 {
-    public class ValoresVariavel : Base
+    public class ValoresVariavel : BaseProjeto
     {
-        public Guid IdVariavel { get; init; }
-        public string Valor { get; init; }
-        public Variavel Variavel { get; init; }
+        public Guid IdVariavel { get; set; }
+        public string Valor { get; set; }
+        public Variavel Variavel { get; set; }
     }
 }

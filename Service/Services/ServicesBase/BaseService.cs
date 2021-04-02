@@ -2,9 +2,9 @@
 using Dominio.Interfaces.Repositorio;
 using Dominio.Interfaces.Service;
 using FluentValidation;
-using Service.Validators;
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Service.Services.ServicesBase
@@ -29,13 +29,13 @@ namespace Service.Services.ServicesBase
             return entidade;
         }
 
-        public async Task<IQueryable<TEntidade>> GetAsync(Func<TEntidade, bool> query = null) => await Repositorio.GetAsync(query);
+        public async Task<IQueryable<TEntidade>> GetAsync(Expression<Func<TEntidade, bool>> query = null) => await Repositorio.GetAsync(query);
 
         public async Task<TEntidade> GetByIdAsync(Guid id) => await Repositorio.GetByIdAsync(id);
 
         public async Task<bool> RemoveAsync(Guid id)
         {
-            if (!await ValidarExistenciaEntidade(id))
+            if (!await ValidarExistenciaEntidadeAsync(id))
                 return false;
             await Repositorio.RemoveAsync(id);
             await Injector.UnitOfWork.CommitAsync();
@@ -44,7 +44,7 @@ namespace Service.Services.ServicesBase
 
         public async Task<TEntidade> UpdateAsync(TEntidade entidade, AbstractValidator<TEntidade> validation)
         {
-            if (!await ValidarExistenciaEntidade(entidade.Id))
+            if (!await ValidarExistenciaEntidadeAsync(entidade.Id))
                 return entidade;
             if (Injector.Validator.Executar(validation, entidade))
             {
@@ -54,16 +54,19 @@ namespace Service.Services.ServicesBase
             return entidade;
         }
 
-        #region Metodos privados
-        private async Task<bool> ValidarExistenciaEntidade(Guid id)
+        #region Metodos Protecteds
+        protected async Task<bool> ValidarExistenciaEntidadeAsync(Guid id)
         {
-            if (await Repositorio.GetByIdAsync(id) is null)
+            if (!await Repositorio.ExistsAsync(x => x.Id == id))
             {
                 Injector.Notificador.Add("Registro solicitado não existe.");
                 return false;
             }
             return true;
         }
+        protected async Task<bool> ValidarExistenciaEntidadeAsync(Expression<Func<TEntidade, bool>> filter)
+            => await Repositorio.ExistsAsync(filter);
+        protected async Task<bool> CommitAsync() => await Injector.UnitOfWork.CommitAsync();
         #endregion
     }
 }

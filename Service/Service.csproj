@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,10 +11,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Crosscuting\Crosscuting.csproj" />
     <ProjectReference Include="..\Dominio\Dominio.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validators\ValidatorsEntidades\" />
   </ItemGroup>
 
 </Project>

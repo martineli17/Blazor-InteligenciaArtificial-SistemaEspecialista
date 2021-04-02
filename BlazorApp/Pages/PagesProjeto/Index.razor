@@ -1,0 +1,16 @@
+﻿@page "/projeto"
+
+<_Cabecalho />
+<_Novo OnRefreshList="RefreshListagem" />
+<hr />
+<_Selecionar Atualizar="AtualizarListagem" />
+
+@code {
+    private bool AtualizarListagem;
+
+    private void RefreshListagem()
+    {
+        AtualizarListagem = !AtualizarListagem;
+        StateHasChanged();
+    }
+}

@@ -6,6 +6,7 @@ using Repositorio.Contexto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Repositorio.Repositorios
@@ -31,12 +32,19 @@ namespace Repositorio.Repositorios
             await Context.Set<TEntity>().AddRangeAsync(entidades);
         }
 
-        public virtual async Task<IQueryable<TEntity>> GetAsync(Func<TEntity, bool> query = null)
+        public virtual async Task<IQueryable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null)
         {
             await Task.Yield();
-            return Context.Set<TEntity>().Where(query).AsQueryable();
+            var query = Context.Set<TEntity>().AsQueryable();
+            if (filter != null)
+                query.Where(filter);
+            return query;
         }
-
+        public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> query)
+        {
+            await Task.Yield();
+            return await Context.Set<TEntity>().AnyAsync(query);
+        }
         public virtual async Task<TEntity> GetByIdAsync(Guid id)
         {
             var entidade = await Context.Set<TEntity>().FindAsync(id);

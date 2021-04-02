@@ -1,9 +1,9 @@
 ﻿namespace Dominio.Entidades
 {
-    public class Projeto : Base
+    public class Projeto : BaseProjeto
     {
-        public string Nome { get; init; }
-        public string Autor { get; init; }
-        public string Descricao { get; init; }
+        public string Nome { get; set; }
+        public string Autor { get; set; }
+        public string Descricao { get; set; }
     }
 }

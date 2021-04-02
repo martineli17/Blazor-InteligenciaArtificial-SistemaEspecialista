@@ -1,0 +1,49 @@
+﻿@using BlazorApp.ViewModels.ModelsProjeto
+@using Crosscuting.Extensions
+@inject BlazorApp.Services.ServicesProjeto.ProjetoServiceAplicacaoGet ServiceGet
+
+<blockquote class="blockquote text-center">
+    <p class="mb-0">Selecione um existente</p>
+    <footer class="blockquote-footer">Após selecionar um existente, você irá realizar as ações baseadas no projeto selecionado</footer>
+</blockquote>
+<form class="form-inline justify-content-center mt-2">
+    <div class="form-group mb-2 ml-3">
+        <select id="projetos-cadastrados" class="form-control" @onchange="SelecionarProjeto">
+            <option value="@Guid.Empty">Selecione</option>
+            @if (ProjetosCadastrados.HasValue())
+            {
+                foreach (var projeto in ProjetosCadastrados)
+                {
+                    <option value="@projeto.Id.ToString()">@projeto.Nome</option>
+                }
+            }
+        </select>
+        <button class="btn btn-purple ml-3">Selecionar</button>
+    </div>
+</form>
+<_DadosProjeto Descricao="@Descricao" Autor="@Autor" />
+
+@code {
+    [Parameter] public bool Atualizar { get; set; }
+    string Descricao = null;
+    string Autor = null;
+    List<ProjetoViewModelGet> ProjetosCadastrados = null;
+
+
+
+    protected override Task OnInitializedAsync() => GetProjetos();
+
+    private void SelecionarProjeto(ChangeEventArgs events)
+    {
+        var projetoSelecionado = ProjetosCadastrados.Find(x => x.Id.ToString() == events.Value.ToString());
+        Descricao = projetoSelecionado.Descricao;
+        Autor = projetoSelecionado.Autor;
+    }
+
+    protected override Task OnParametersSetAsync() => GetProjetos();
+
+    private async Task GetProjetos() =>
+            ProjetosCadastrados = (List<ProjetoViewModelGet>)
+            await (Service.CallService(ServiceGet, Enums.EnumTipoSendService.Listar));
+
+}

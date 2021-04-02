@@ -10,6 +10,7 @@ namespace Repositorio.Mapeamento
         {
             builder.ToTable("VALORESVARIAVEL");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.IdProjeto).HasColumnName("IDPROJETO").HasColumnType("UNIQUEIDENTIFIER").IsRequired();
             builder.Property(x => x.Valor).HasColumnName("VALOR").HasColumnType("VARCHAR(250)").IsRequired().HasMaxLength(250);
             builder.HasOne(x => x.Variavel).WithMany(x => x.Valores).HasForeignKey(x => x.IdVariavel);
         }

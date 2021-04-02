@@ -2,13 +2,12 @@
 
 namespace Dominio.Entidades
 {
-    public class RegraVariavel : Base
+    public class RegraVariavel : BaseProjeto
     {
-        public Guid IdVariavel { get; init; }
-        public Guid IdRegra { get; init; }
-        public Regra Regra { get; init; }
-        public Variavel Variavel { get; init; }
-        public string ValorVariavel { get; init; }
-        public bool? Complemento { get; init; }
+        public Guid IdVariavel { get; set; }
+        public Guid IdRegra { get; set; }
+        public Regra Regra { get; set; }
+        public Variavel Variavel { get; set; }
+        public string ValorVariavel { get; set; }
     }
 }

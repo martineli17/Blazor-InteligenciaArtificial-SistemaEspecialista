@@ -1,0 +1,39 @@
+﻿@using BlazorApp.ViewModels.ModelsProjeto
+@inject BlazorApp.Services.ServicesProjeto.ProjetoServiceAplicacaoAdd ServiceAdd
+
+<blockquote class="blockquote text-center">
+    <p class="mb-0">Inicie um novo projeto</p>
+    <footer class="blockquote-footer">Crie novos projetos para inicar um novo sistema especialista</footer>
+</blockquote>
+<form>
+    <div class="row">
+        <div class="col-md-3">
+            <label for="autor-projeto" class="">Autor</label>
+            <input maxlength="25" id="autor-projeto" type="text" class="form-control" @bind="ViewModel.Autor" />
+        </div>
+        <div class="col-md-3">
+            <label for="nome-projeto" class="">Nome</label>
+            <input maxlength="25" id="nome-projeto" type="text" class="form-control" @bind="ViewModel.Nome" />
+        </div>
+        <div class="col-md-6">
+            <label for="descricao-projeto" class="">Desrição</label>
+            <textarea class="form-control" id="descricao-projeto" @bind="ViewModel.Descricao"></textarea>
+        </div>
+    </div>
+</form>
+<div class="row justify-content-center m-md-4">
+    <button class="btn btn-purple" @onclick="() => AddProjeto()">
+        Adicionar
+    </button>
+</div>
+@code {
+    [Parameter] public Action OnRefreshList { get; set; }
+    private ProjetoViewModelAdd ViewModel = new ProjetoViewModelAdd();
+    private async Task AddProjeto()
+    {
+        if((bool)await Service.CallService(ServiceAdd, Enums.EnumTipoSendService.Adicionar, ViewModel))
+        {
+            OnRefreshList.Invoke();
+        }
+    }
+}

@@ -10,9 +10,9 @@ namespace Repositorio.Mapeamento
         {
             builder.ToTable("REGRAVARIAVEL");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.IdProjeto).HasColumnName("IDPROJETO").HasColumnType("UNIQUEIDENTIFIER").IsRequired();
             builder.Property(x => x.ValorVariavel).HasColumnName("VALORVARIAVEL").HasColumnType("VARCHAR(250)").IsRequired().HasMaxLength(250);
             builder.Property(x => x.IdVariavel).HasColumnName("IDVARIAVEL").HasColumnType("UNIQUEIDENTIFIER").IsRequired();
-            builder.Property(x => x.Complemento).HasColumnName("COMPLEMENTO").HasColumnType("BIT");
             builder.HasOne(x => x.Regra).WithMany(x => x.RegrasVariavel).HasForeignKey(x => x.IdRegra);
             builder.HasOne(x => x.Variavel).WithMany(x => x.RegrasVariavel).HasForeignKey(x => x.IdVariavel);
         }

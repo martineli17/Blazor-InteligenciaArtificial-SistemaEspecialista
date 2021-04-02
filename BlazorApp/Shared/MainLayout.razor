@@ -1,0 +1,26 @@
+﻿@inherits LayoutComponentBase
+@using Blazored.Toast.Configuration
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="main">
+    <div class="content px-4">
+        @Body
+    </div>
+</div>
+
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="5"
+                SuccessClass="toast-message"
+                ErrorClass="toast-message"
+                InfoClass="toast-message"
+                WarningClass="toast-message"
+                IconType="Blazored.Toast.IconType.FontAwesome"
+                SuccessIcon="oi oi-check"
+                ErrorIcon="oi oi-x"
+                WarningIcon="oi oi-warning"
+                InfoIcon="oi oi-info"
+                ShowProgressBar="true" />
