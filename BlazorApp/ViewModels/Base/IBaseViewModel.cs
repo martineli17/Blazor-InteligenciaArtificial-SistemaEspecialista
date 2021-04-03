@@ -1,4 +1,5 @@
-﻿namespace BlazorApp.ViewModels.Base
+﻿
+namespace BlazorApp.ViewModels.Base
 {
     public interface IBaseViewModel
     {
