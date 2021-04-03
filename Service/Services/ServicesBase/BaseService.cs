@@ -19,13 +19,10 @@ namespace Service.Services.ServicesBase
             Repositorio = repositorio;
             Injector = injector;
         }
-        public async Task<TEntidade> AddAsync(TEntidade entidade, AbstractValidator<TEntidade> validation)
+        public async Task<TEntidade> AddAsync(TEntidade entidade)
         {
-            if (Injector.Validator.Executar(validation, entidade))
-            {
-                await Repositorio.AddAsync(entidade);
-                await Injector.UnitOfWork.CommitAsync();
-            }
+            await Repositorio.AddAsync(entidade);
+            await Injector.UnitOfWork.CommitAsync();
             return entidade;
         }
 
@@ -42,15 +39,10 @@ namespace Service.Services.ServicesBase
             return true;
         }
 
-        public async Task<TEntidade> UpdateAsync(TEntidade entidade, AbstractValidator<TEntidade> validation)
+        public async Task<TEntidade> UpdateAsync(TEntidade entidade)
         {
-            if (!await ValidarExistenciaEntidadeAsync(entidade.Id))
-                return entidade;
-            if (Injector.Validator.Executar(validation, entidade))
-            {
-                await Repositorio.UpdateAsync(entidade);
-                await Injector.UnitOfWork.CommitAsync();
-            }
+            await Repositorio.UpdateAsync(entidade);
+            await Injector.UnitOfWork.CommitAsync();
             return entidade;
         }
 

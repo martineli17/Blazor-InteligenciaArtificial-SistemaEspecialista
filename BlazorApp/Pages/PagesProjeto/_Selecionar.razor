@@ -8,7 +8,7 @@
 </blockquote>
 <form class="form-inline justify-content-center mt-2">
     <div class="form-group mb-2 ml-3">
-        <select id="projetos-cadastrados" class="form-control" @onchange="SelecionarProjeto">
+        <select id="projetos-cadastrados" class="form-control" @onchange="ChangeProjeto">
             <option value="@Guid.Empty">Selecione</option>
             @if (ProjetosCadastrados.HasValue())
             {
@@ -18,7 +18,7 @@
                 }
             }
         </select>
-        <button class="btn btn-purple ml-3">Selecionar</button>
+        <button class="btn btn-purple ml-3" type="button" @onclick="SelecionarProjeto">Selecionar</button>
     </div>
 </form>
 <_DadosProjeto Descricao="@Descricao" Autor="@Autor" />
@@ -27,18 +27,22 @@
     [Parameter] public bool Atualizar { get; set; }
     string Descricao = null;
     string Autor = null;
+    Guid Id = Guid.Empty;
     List<ProjetoViewModelGet> ProjetosCadastrados = null;
 
 
 
     protected override Task OnInitializedAsync() => GetProjetos();
 
-    private void SelecionarProjeto(ChangeEventArgs events)
+    private void ChangeProjeto(ChangeEventArgs events)
     {
         var projetoSelecionado = ProjetosCadastrados.Find(x => x.Id.ToString() == events.Value.ToString());
         Descricao = projetoSelecionado.Descricao;
         Autor = projetoSelecionado.Autor;
+        Id = projetoSelecionado.Id;
+        ProjetoSelecionado.IdProjetoSelecionado = Guid.Parse(events.Value.ToString());
     }
+    private void SelecionarProjeto() => ProjetoSelecionado.IdProjetoSelecionado = Id;
 
     protected override Task OnParametersSetAsync() => GetProjetos();
 

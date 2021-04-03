@@ -1,0 +1,53 @@
+﻿@using BlazorApp.ViewModels.ModelsVariavel
+@inject BlazorApp.Services.ServicesVariavel.VariavelServiceAplicacaoAdd ServiceAdd
+
+<form>
+    <div class="row">
+        <div class="col-md-2">
+            <label for="nome-variavel" class="">Nome</label>
+            <input maxlength="25" id="nome-variavel" type="text" class="form-control" @bind="ViewModel.Nome" />
+        </div>
+        <div class="col-md-4">
+            <label for="pergunta-variavel" class="">Pergunta</label>
+            <input maxlength="100" id="pergunta-variavel" type="text" class="form-control" @bind="ViewModel.Pergunta" />
+        </div>
+        <div class="col-md-6">
+            <label for="motivo-pergunta-variavel" class="">Motivo pergunta</label>
+            <textarea class="form-control" id="motivo-pergunta-variavel" @bind="ViewModel.MotivoPergunta"></textarea>
+        </div>
+    </div>
+    <div class="row justify-content-center m-md-4">
+        <div class="col-md-3">
+            <label class="form-check-label">Variável objetivo</label>
+        </div>
+        <div class="col-md-3">
+            <input @onchange="(() => ChangeObjetivo(true))" id="variavel-objetivo-nao" name="variavel-objetivo" type="radio" class="form-check-inline" />
+            <label for="variavel-objetivo-nao" class="form-check-label">Não</label>
+        </div>
+        <div class="col-md-3">
+            <input @onchange="(() => ChangeObjetivo(false))" id="variavel-objetivo-sim" name="variavel-objetivo" type="radio" class="form-check-inline" />
+            <label for="variavel-objetivo-sim" class="form-check-label">Sim</label>
+        </div>
+    </div>
+</form>
+<div class="row justify-content-center m-md-4">
+    <button class="btn btn-purple" @onclick="() => AddVariavel()">
+        Adicionar
+    </button>
+</div>
+
+@code {
+    [Parameter] public Action OnRefreshList { get; set; }
+    private VariavelViewModelAdd ViewModel = new VariavelViewModelAdd();
+
+    private async Task AddVariavel()
+    {
+        ViewModel.IdProjeto = ProjetoSelecionado.IdProjetoSelecionado;
+        if ((bool)await Service.CallService(ServiceAdd, Enums.EnumTipoSendService.Adicionar, ViewModel))
+        {
+            OnRefreshList.Invoke();
+        }
+    }
+
+    private void ChangeObjetivo(bool value) => ViewModel.Objetivo = value; 
+}

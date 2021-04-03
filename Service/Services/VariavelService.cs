@@ -2,6 +2,7 @@
 using Dominio.Interfaces.Repositorio;
 using Dominio.Interfaces.Service;
 using Service.Services.ServicesBase;
+using Service.Validators.ValidatorsEntidades;
 using System.Threading.Tasks;
 
 namespace Service.Services
@@ -12,15 +13,29 @@ namespace Service.Services
             : base(repositorio, injector)
         {
         }
-        public async Task<Variavel> AddAsync(Variavel entidade)
+        public new async Task<Variavel> AddAsync(Variavel entidade)
         {
-            await base.Repositorio.UpdateAsync(entidade);
+            if (!Injector.Validator.Executar(new VariavelValidator(), entidade)
+                || await ValidarExistenciaEntidadeAsync(x => x.Nome.ToLower() == entidade.Nome.ToLower() 
+                                                        && x.IdProjeto == entidade.IdProjeto))
+            {
+                Injector.Notificador.Add("Variável já existente para este projeto.");
+                return null;
+            }
+            await base.AddAsync(entidade);
             return entidade;
         }
 
-        public async Task<Variavel> UpdateAsync(Variavel entidade)
+        public new async Task<Variavel> UpdateAsync(Variavel entidade)
         {
-            await base.Repositorio.UpdateAsync(entidade);
+            if (!Injector.Validator.Executar(new VariavelValidator(), entidade)
+              || await ValidarExistenciaEntidadeAsync(x => x.Nome.ToLower() == entidade.Nome.ToLower() 
+                                            && x.Id != entidade.Id && x.IdProjeto == entidade.IdProjeto))
+            {
+                Injector.Notificador.Add("Variável já existente para este projeto.");
+                return null;
+            }
+            await base.UpdateAsync(entidade);
             return entidade;
         }
 

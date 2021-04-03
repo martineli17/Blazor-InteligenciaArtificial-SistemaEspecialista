@@ -1,9 +1,7 @@
 ﻿using Dominio.Entidades;
+using Dominio.Interfaces.Repositorio;
 using FluentValidation;
 using Service.Validators.MessagensValidator;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Service.Validators.ValidatorsEntidades
 {
@@ -11,6 +9,7 @@ namespace Service.Validators.ValidatorsEntidades
     {
         public VariavelValidator()
         {
+            RuleFor(x => x.IdProjeto).NotEmpty().WithMessage("Necessário selecionar um projeto.");
             RuleFor(x => x.Nome).NotEmpty().WithMessage(MensagemValidator.NaoNuloOuVazio("Nome"))
                 .MaximumLength(50).WithMessage(MensagemValidator.NaoMaior("Nome"));
             RuleFor(x => x.Objetivo).NotEmpty().WithMessage(MensagemValidator.NaoNuloOuVazio("Objetivo"))

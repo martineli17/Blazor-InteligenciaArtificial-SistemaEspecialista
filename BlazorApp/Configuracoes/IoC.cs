@@ -12,6 +12,7 @@ using Service.Services;
 using Service.Services.ServicesBase;
 using Service.Validators.ValidadorBase;
 using System;
+using BlazorApp.Services.ServicesVariavel;
 
 namespace BlazorApp.Configuracoes
 {
@@ -28,12 +29,14 @@ namespace BlazorApp.Configuracoes
             service.TryAddScoped<Context>();
             service.TryAddTransient<IUnitOfWork, UnitOfWork>();
             service.TryAddTransient<IProjetoRepositorio, ProjetoRepositorio>();
+            service.TryAddTransient<IVariavelRepositorio, VariavelRepositorio>();
             #endregion
 
             #region Services
             service.TryAddScoped<InjectorServiceBase>();
             service.TryAddTransient<IValidacaoFluent, ValidacaoFluent>();
             service.TryAddTransient<IProjetoService, ProjetoService>();
+            service.TryAddTransient<IVariavelService, VariavelService>();
             #endregion
 
             #region Services front
@@ -43,6 +46,11 @@ namespace BlazorApp.Configuracoes
             #region Projeto
             service.TryAddTransient<ProjetoServiceAplicacaoAdd>();
             service.TryAddTransient<ProjetoServiceAplicacaoGet>();
+            service.TryAddSingleton<ProjetoSelecionadoServiceAplicacao>();
+            #endregion
+
+            #region Variavel
+            service.TryAddTransient<VariavelServiceAplicacaoAdd>();
             #endregion
 
             #endregion
