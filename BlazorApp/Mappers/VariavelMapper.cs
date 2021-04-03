@@ -9,6 +9,7 @@ namespace BlazorApp.Mappers
         public VariavelMapper()
         {
             CreateMap<VariavelViewModelAdd, Variavel>();
+            CreateMap<Variavel, VariavelViewModelGet>();
         }
     }
 }

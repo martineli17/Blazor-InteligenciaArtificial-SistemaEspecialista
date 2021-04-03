@@ -51,6 +51,7 @@ namespace BlazorApp.Configuracoes
 
             #region Variavel
             service.TryAddTransient<VariavelServiceAplicacaoAdd>();
+            service.TryAddTransient<VariavelServiceAplicacaoGet>();
             #endregion
 
             #endregion

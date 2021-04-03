@@ -1,0 +1,61 @@
+﻿@using BlazorApp.ViewModels.ModelsVariavel
+@using Crosscuting.Extensions
+@inject BlazorApp.Services.ServicesVariavel.VariavelServiceAplicacaoGet ServiceGet
+
+@if (VariaveisCadastradas != null && VariaveisCadastradas.Any())
+{
+    @foreach (var agrupamentoVariavel in VariaveisCadastradas.GroupBy(x => x.Nome))
+    {
+        <div class="card text-center m-md-4">
+            <div class="card-body">
+                <h5 class="card-title font-weight-bolder">VARIAVEL | @agrupamentoVariavel.Key.ToUpper()</h5>
+                <table class="table table-hover table-responsive-md table-borderless">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Objetivo</th>
+                            <th>Pergunta</th>
+                            <th>Motivo Pergunta</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var variavel in agrupamentoVariavel.ToList())
+                        {
+                            <tr>
+                                <td title="@variavel.Nome?.ToUpper()">@variavel.Nome?.ToUpper()?.TrySubstring(30)</td>
+                                <td>@variavel.Objetivo</td>
+                                <td>@variavel.Pergunta</td>
+                                <td>@variavel.MotivoPergunta</td>
+                                <td>
+                                    <span title="Atualizar" @onclick="(() => GetFormUpdate(variavel))"
+                                          class="oi oi-loop-circular oi-align-center"></span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+
+@code {
+    [Parameter] public Action<VariavelViewModelGet> CallFormUpdate { get; set; }
+    [Parameter] public bool Atualizar { get; set; }
+    string Nome = null;
+    string Pergunta = null;
+    string Objetivo = null;
+    string MotivoPergunta = null;
+    Guid Id = Guid.Empty;
+    List<VariavelViewModelGet> VariaveisCadastradas = null;
+
+    protected override Task OnParametersSetAsync() => GetVariaveis();
+
+    private void GetFormUpdate(VariavelViewModelGet variavel) => CallFormUpdate.Invoke(variavel);
+
+    private async Task GetVariaveis() =>
+            VariaveisCadastradas = (List<VariavelViewModelGet>)
+            await (Service.CallService(ServiceGet, Enums.EnumTipoSendService.Listar));
+}
