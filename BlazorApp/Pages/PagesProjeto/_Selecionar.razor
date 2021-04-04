@@ -24,11 +24,12 @@
 <_DadosProjeto Descricao="@Descricao" Autor="@Autor" />
 
 @code {
-    [Parameter] public bool Atualizar { get; set; }
-    string Descricao = null;
-    string Autor = null;
-    Guid Id = Guid.Empty;
-    List<ProjetoViewModelGet> ProjetosCadastrados = null;
+        [Parameter] public bool Atualizar { get; set; }
+        string Descricao = null;
+        string Autor = null;
+        string Nome = null;
+        Guid Id = Guid.Empty;
+        List<ProjetoViewModelGet> ProjetosCadastrados = null;
 
 
 
@@ -37,12 +38,17 @@
     private void ChangeProjeto(ChangeEventArgs events)
     {
         var projetoSelecionado = ProjetosCadastrados.Find(x => x.Id.ToString() == events.Value.ToString());
+        if (projetoSelecionado == null) return;
         Descricao = projetoSelecionado.Descricao;
         Autor = projetoSelecionado.Autor;
         Id = projetoSelecionado.Id;
-        ProjetoSelecionado.IdProjetoSelecionado = Guid.Parse(events.Value.ToString());
+        Nome = projetoSelecionado.Nome;
     }
-    private void SelecionarProjeto() => ProjetoSelecionado.IdProjetoSelecionado = Id;
+    private void SelecionarProjeto()
+    { 
+        ProjetoSelecionado.IdProjetoSelecionado = Id;
+        ProjetoSelecionado.NomeProjetoSelecionado = Nome;
+    }
 
     protected override Task OnParametersSetAsync() => GetProjetos();
 

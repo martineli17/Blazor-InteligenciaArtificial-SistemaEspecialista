@@ -1,70 +1,91 @@
 ﻿@using BlazorApp.ViewModels.ModelsVariavel
+@using BlazorApp.ViewModels.Base
 @using Crosscuting.Extensions
 @inject BlazorApp.Services.ServicesVariavel.VariavelServiceAplicacaoGet ServiceGet
+@inject BlazorApp.Services.ServicesVariavel.VariavelServiceAplicacaoRemove ServiceRemove
 
 @if (VariaveisCadastradas != null && VariaveisCadastradas.Any())
 {
-    @foreach (var agrupamentoVariavel in VariaveisCadastradas.GroupBy(x => x.Nome))
-    {
-        <div class="card text-center m-md-4">
-            <div class="card-body">
-                <h5 class="card-title font-weight-bolder">Variáveis</h5>
-                <table class="table table-hover table-responsive-md table-borderless">
-                    <thead class="thead-light">
+    <div class="card text-center m-md-4">
+        <div class="card-body">
+            <h5 class="card-title font-weight-bolder">Variáveis</h5>
+            <table class="table table-hover table-responsive-md table-borderless">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Objetivo</th>
+                        <th>Pergunta</th>
+                        <th>Motivo Pergunta</th>
+                        <th>Valores</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var variavel in VariaveisCadastradas)
+                    {
+
                         <tr>
-                            <th>Nome</th>
-                            <th>Objetivo</th>
-                            <th>Pergunta</th>
-                            <th>Motivo Pergunta</th>
-                            <th></th>
-                            <th></th>
+                            <td title="@variavel.Nome?.ToUpper()">@variavel.Nome?.TrySubstring(30)</td>
+                            <td>
+                                @if (variavel.Objetivo)
+                                {
+                                    <span class="oi oi-circle-check"></span>
+                                }
+                                else
+                                {
+                                    <span class="oi oi-circle-x"></span>
+                                }
+                            </td>
+                            <td data-toggle="tooltip" title="@variavel.Pergunta">@variavel.Pergunta</td>
+                            <td data-toggle="tooltip" title="@variavel.MotivoPergunta">@variavel.MotivoPergunta</td>
+                            <td>
+                                <select class="form-control">
+                                    @if (variavel.Valores != null && variavel.Valores.Any())
+                                    {
+                                        foreach (var item in variavel.Valores)
+                                        {
+                                            <option>@item.Valor</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <option>Nenhum</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <span title="Remover" @onclick="() => DeleteAsync(variavel.Id)"
+                                      class="oi oi-trash text-center oi-align-center"></span>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var variavel in agrupamentoVariavel.ToList())
-                        {
-                            <tr>
-                                <td title="@variavel.Nome?.ToUpper()">@variavel.Nome?.ToUpper()?.TrySubstring(30)</td>
-                                <td>@variavel.Objetivo</td>
-                                <td>@variavel.Pergunta</td>
-                                <td>@variavel.MotivoPergunta</td>
-                                <td>
-                                    <span title="Remover" 
-                                          class="oi oi-trash text-center oi-align-center"></span>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
-    }
+    </div>
 }
 
 @code {
     [Parameter] public Action<VariavelViewModelGet> CallFormUpdate { get; set; }
     [Parameter] public bool Atualizar { get; set; }
-    string Nome = null;
-    string Pergunta = null;
-    string Objetivo = null;
-    string MotivoPergunta = null;
-    Guid Id = Guid.Empty;
     List<VariavelViewModelGet> VariaveisCadastradas = null;
 
     protected override Task OnParametersSetAsync() => GetVariaveis();
 
-    /*private async Task DeleteAsync(Guid id)
+    protected override Task OnInitializedAsync() => GetVariaveis();
+
+    private async Task DeleteAsync(Guid id)
     {
-        if ((bool)await Service.CallService(, Enums.EnumTipoSendService.Excluir,
-                                new BlazorApp.ViewModels.BaseRemoveViewModel { Id = id }))
+        if ((bool)await Service.CallService(ServiceRemove, Enums.EnumTipoSendService.Excluir,
+                                new BaseRemoveViewModel { Id = id }))
         {
-            VariaveisCadastradas = (IEnumerable<VariavelViewModelGet>)await Service
-             .CallService(, Enums.EnumTipoSendService.Listar);
+            await GetVariaveis();
             StateHasChanged();
         }
-    }*/
+    }
 
     private async Task GetVariaveis() =>
-        VariaveisCadastradas = (List<VariavelViewModelGet>)
-        await (Service.CallService(ServiceGet, Enums.EnumTipoSendService.Listar));
+    VariaveisCadastradas = (List<VariavelViewModelGet>)
+            await (Service.CallService(ServiceGet, Enums.EnumTipoSendService.Listar));
+
 }

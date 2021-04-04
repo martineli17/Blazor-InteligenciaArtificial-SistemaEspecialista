@@ -13,13 +13,13 @@ namespace Service.Services
         {
         }
 
-        public async Task<Regra> AddAsync(Regra entidade)
+        public new async Task<Regra> AddAsync(Regra entidade)
         {
             await base.Repositorio.UpdateAsync(entidade);
             return entidade;
         }
 
-        public async Task<Regra> UpdateAsync(Regra entidade)
+        public new async Task<Regra> UpdateAsync(Regra entidade)
         {
             await base.Repositorio.UpdateAsync(entidade);
             return entidade;

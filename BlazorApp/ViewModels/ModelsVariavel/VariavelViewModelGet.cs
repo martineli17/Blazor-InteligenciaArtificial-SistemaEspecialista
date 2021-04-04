@@ -1,12 +1,12 @@
-﻿using System;
+﻿using BlazorApp.ViewModels.ModelsValoresVariavel;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlazorApp.ViewModels.ModelsVariavel
 {
     public class VariavelViewModelGet : VariavelViewModelBase
     {
         public Guid Id { get; set; }
+        public List<ValoresVariavelViewModelGet> Valores { get; set; }
     }
 }

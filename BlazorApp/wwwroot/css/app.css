@@ -1,5 +1,9 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+.oi{
+    cursor: pointer;
+}
+
 .blazored-toast-heading {
     font-size: 13px;
 }

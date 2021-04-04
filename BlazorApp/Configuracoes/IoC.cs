@@ -30,6 +30,7 @@ namespace BlazorApp.Configuracoes
             service.TryAddTransient<IUnitOfWork, UnitOfWork>();
             service.TryAddTransient<IProjetoRepositorio, ProjetoRepositorio>();
             service.TryAddTransient<IVariavelRepositorio, VariavelRepositorio>();
+            service.TryAddTransient<IValoresVariavelRepositorio, ValoresVariavelRepositorio>();
             #endregion
 
             #region Services
@@ -37,6 +38,7 @@ namespace BlazorApp.Configuracoes
             service.TryAddTransient<IValidacaoFluent, ValidacaoFluent>();
             service.TryAddTransient<IProjetoService, ProjetoService>();
             service.TryAddTransient<IVariavelService, VariavelService>();
+            service.TryAddTransient<IValoresVariavelService, ValoresVariavelService>();
             #endregion
 
             #region Services front
@@ -52,6 +54,7 @@ namespace BlazorApp.Configuracoes
             #region Variavel
             service.TryAddTransient<VariavelServiceAplicacaoAdd>();
             service.TryAddTransient<VariavelServiceAplicacaoGet>();
+            service.TryAddTransient<VariavelServiceAplicacaoRemove>();
             #endregion
 
             #endregion

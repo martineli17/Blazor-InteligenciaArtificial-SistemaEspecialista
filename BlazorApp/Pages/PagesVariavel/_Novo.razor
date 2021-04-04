@@ -7,28 +7,44 @@
             <label for="nome-variavel" class="">Nome</label>
             <input maxlength="25" id="nome-variavel" type="text" class="form-control" @bind="ViewModel.Nome" />
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
             <label for="pergunta-variavel" class="">Pergunta</label>
             <input maxlength="100" id="pergunta-variavel" type="text" class="form-control" @bind="ViewModel.Pergunta" />
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <label for="motivo-pergunta-variavel" class="">Motivo pergunta</label>
-            <textarea class="form-control" id="motivo-pergunta-variavel" @bind="ViewModel.MotivoPergunta"></textarea>
+            <input maxlength="100" id="motivo-pergunta-variavel" type="text" class="form-control" @bind="ViewModel.MotivoPergunta" />
         </div>
     </div>
-    <div class="row justify-content-center m-md-4">
-        <div class="col-md-3">
-            <label class="form-check-label">Variável objetivo</label>
+    <div class="row">
+        <div class="form-check col-md-3 mt-4 ml-4">
+            <input class="form-check-input" type="checkbox" id="variavel-objetivo" @onclick="ChangeObjetivo">
+            <label class="form-check-label" @onclick="ChangeObjetivo">Variável objetivo</label>
         </div>
-        <div class="col-md-3">
-            <input @onchange="(() => ChangeObjetivo(true))" id="variavel-objetivo-nao" name="variavel-objetivo" type="radio" class="form-check-inline" />
-            <label for="variavel-objetivo-nao" class="form-check-label">Não</label>
+        <div class="col-md-6">
+            <label class="form-check-label">Valor</label>
+            <input type="text" class="form-control" @bind="ValorVariavel" />
         </div>
-        <div class="col-md-3">
-            <input @onchange="(() => ChangeObjetivo(false))" id="variavel-objetivo-sim" name="variavel-objetivo" type="radio" class="form-check-inline" />
-            <label for="variavel-objetivo-sim" class="form-check-label">Sim</label>
+        <div class="col-md-1 mt-4">
+            <button type="button" class="btn btn-light" @onclick="AddValorVariavel">
+                Inserir
+            </button>
         </div>
     </div>
+    @if (ViewModel.ValoresDaVariavel.Any())
+    {
+        <div class="card mt-2" style="max-height: 150px; overflow: auto;">
+            <div class="card-header justify-content-center">
+                Valores da variável
+            </div>
+            <div class="card-body justify-content-center">
+                @foreach (var valor in ViewModel.ValoresDaVariavel)
+                {
+                    <p class="card-text">@valor<span class="oi oi-trash ml-3" @onclick="() => RemoveValorVariavel(valor)"></span></p>
+                }
+            </div>
+        </div>
+    }
 </form>
 <div class="row justify-content-center m-md-4">
     <button class="btn btn-purple" @onclick="() => AddVariavel()">
@@ -39,16 +55,25 @@
 @code {
     [Parameter] public Action OnRefreshList { get; set; }
     private VariavelViewModelAdd ViewModel = new VariavelViewModelAdd();
+    private string ValorVariavel;
 
     private async Task AddVariavel()
     {
         ViewModel.IdProjeto = ProjetoSelecionado.IdProjetoSelecionado;
         if ((bool)await Service.CallService(ServiceAdd, Enums.EnumTipoSendService.Adicionar, ViewModel))
         {
+            ViewModel.ValoresDaVariavel.Clear();
             OnRefreshList.Invoke();
         }
-        
     }
 
-    private void ChangeObjetivo(bool value) => ViewModel.Objetivo = value; 
+    private void ChangeObjetivo() => ViewModel.Objetivo = !ViewModel.Objetivo;
+
+    private void AddValorVariavel()
+    {
+        if (ValorVariavel != null && !ViewModel.ValoresDaVariavel.Contains(ValorVariavel))
+            ViewModel.ValoresDaVariavel.Add(ValorVariavel);
+    }
+
+    private void RemoveValorVariavel(string value) => ViewModel.ValoresDaVariavel.Remove(value);
 }

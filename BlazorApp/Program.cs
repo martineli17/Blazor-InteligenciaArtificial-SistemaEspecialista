@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Blazored.Modal;
 
 namespace BlazorApp
 {
@@ -17,9 +18,10 @@ namespace BlazorApp
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
-            builder.Services.AddBlazoredToast();
             builder.Services.AddDataBaseInMemory();
             builder.Services.AddInjecaoDependencia();
+            builder.Services.AddBlazoredToast();
+            builder.Services.AddBlazoredModal();
             await builder.Build().RunAsync();
         }
     }

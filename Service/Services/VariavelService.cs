@@ -3,6 +3,9 @@ using Dominio.Interfaces.Repositorio;
 using Dominio.Interfaces.Service;
 using Service.Services.ServicesBase;
 using Service.Validators.ValidatorsEntidades;
+using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Service.Services
@@ -39,5 +42,7 @@ namespace Service.Services
             return entidade;
         }
 
+        public async Task<IQueryable<Variavel>> GetWithIncludesAsync(Expression<Func<Variavel, bool>> filter = null)
+            => await ((IVariavelRepositorio)Repositorio).GetWithIncludesAsync(filter);
     }
 }

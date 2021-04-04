@@ -3,6 +3,7 @@ using Dominio.Interfaces.Repositorio;
 using Dominio.Interfaces.Service;
 using FluentValidation;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -20,6 +21,13 @@ namespace Service.Services.ServicesBase
             Injector = injector;
         }
         public async Task<TEntidade> AddAsync(TEntidade entidade)
+        {
+            await Repositorio.AddAsync(entidade);
+            await Injector.UnitOfWork.CommitAsync();
+            return entidade;
+        }
+
+        public async Task<IEnumerable<TEntidade>> AddAsync(IEnumerable<TEntidade> entidade)
         {
             await Repositorio.AddAsync(entidade);
             await Injector.UnitOfWork.CommitAsync();

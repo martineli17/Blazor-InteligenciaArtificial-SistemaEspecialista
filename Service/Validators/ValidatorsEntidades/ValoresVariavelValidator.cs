@@ -17,4 +17,13 @@ namespace Service.Validators.ValidatorsEntidades
 
         }
     }
+    public class ValoresVariavelsValidator : AbstractValidator<IEnumerable<ValoresVariavel>>
+    {
+        public ValoresVariavelsValidator()
+        {
+            RuleForEach(x => x).SetValidator(new ValoresVariavelValidator());
+
+        }
+    }
+
 }

@@ -16,8 +16,9 @@ namespace BlazorApp.Services.ServicesVariavel
 
         public async Task<object> SendService(IBaseViewModel model = null)
         {
-            var variaveisCadastradas = await Service.GetAsync(x => x.IdProjeto == IdProjetoSelecionado);
-            return Injector.Mapper.Map<IEnumerable<VariavelViewModelGet>>(variaveisCadastradas);
+            var variaveisCadastradas = await Service.GetWithIncludesAsync();
+            return Injector.Mapper.Map<IEnumerable<VariavelViewModelGet>>(variaveisCadastradas
+                                             .Where(x => x.IdProjeto == IdProjetoSelecionado));
         }
     }
 }
