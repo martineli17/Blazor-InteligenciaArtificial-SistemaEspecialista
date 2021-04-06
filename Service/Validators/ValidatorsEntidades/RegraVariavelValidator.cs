@@ -1,9 +1,6 @@
 ﻿using Dominio.Entidades;
 using FluentValidation;
 using Service.Validators.MessagensValidator;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Service.Validators.ValidatorsEntidades
 {

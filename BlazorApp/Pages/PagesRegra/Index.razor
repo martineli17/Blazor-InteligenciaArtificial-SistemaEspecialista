@@ -1,0 +1,15 @@
+﻿@page "/regra"
+<Cabecalho NomeAba="Regras" />
+<_Novo />
+<hr />
+<_ListRegra />
+
+@code {
+    private bool AtualizarListagem;
+
+    private void RefreshListagem()
+    {
+        AtualizarListagem = !AtualizarListagem;
+        StateHasChanged();
+    }
+}

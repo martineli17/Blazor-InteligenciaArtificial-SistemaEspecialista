@@ -18,8 +18,8 @@ namespace Service.Services
         }
         public new async Task<Variavel> AddAsync(Variavel entidade)
         {
-            if (!Injector.Validator.Executar(new VariavelValidator(), entidade)
-                || await ValidarExistenciaEntidadeAsync(x => x.Nome.ToLower() == entidade.Nome.ToLower() 
+            if (!Injector.Validator.Executar(new VariavelValidator(), entidade)) return null;
+            if(await ValidarExistenciaEntidadeAsync(x => x.Nome.ToLower() == entidade.Nome.ToLower() 
                                                         && x.IdProjeto == entidade.IdProjeto))
             {
                 Injector.Notificador.Add("Variável já existente para este projeto.");
@@ -31,8 +31,8 @@ namespace Service.Services
 
         public new async Task<Variavel> UpdateAsync(Variavel entidade)
         {
-            if (!Injector.Validator.Executar(new VariavelValidator(), entidade)
-              || await ValidarExistenciaEntidadeAsync(x => x.Nome.ToLower() == entidade.Nome.ToLower() 
+            if (!Injector.Validator.Executar(new VariavelValidator(), entidade)) return null;
+            if(await ValidarExistenciaEntidadeAsync(x => x.Nome.ToLower() == entidade.Nome.ToLower() 
                                             && x.Id != entidade.Id && x.IdProjeto == entidade.IdProjeto))
             {
                 Injector.Notificador.Add("Variável já existente para este projeto.");

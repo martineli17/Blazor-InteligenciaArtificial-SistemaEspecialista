@@ -1,0 +1,138 @@
+﻿@using BlazorApp.ViewModels.ModelsRegra
+@using BlazorApp.ViewModels.ModelsVariavel
+@inject BlazorApp.Services.ServicesVariavel.VariavelServiceAplicacaoGet ServiceVariavelGet
+
+<form>
+    <div class="row">
+        <div class="col-md-3">
+            <label for="nome-variavel" class="">Variável</label>
+            <select class="form-control" @onchange="GetValoresVariavel">
+                <option>Nenhum</option>
+                @if (Variaveis.Any())
+                {
+                    foreach (var variavel in Variaveis)
+                    {
+                        <option value="@variavel.Id">@variavel.Nome</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="nome-variavel" class="">Valores</label>
+            <select class="form-control" @bind="ValorVariavel">
+                <option>Nenhum</option>
+                @if (Variavel != null && Variavel.Valores != null && Variavel.Valores.Any())
+                {
+                    foreach (var valor in Variavel.Valores)
+                    {
+                        <option value="@valor.Valor">@valor.Valor</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="col-md-2 mt-4">
+            <button type="button" class="btn btn-light" @onclick="() => AddRegraVariavel()">
+                Inserir Variável
+            </button>
+        </div>
+    </div>
+    @if (ViewModel.RegrasVariavel.Any())
+    {
+        <div class="card mt-3" style="max-height: 150px; overflow: auto;">
+            <div class="card-header justify-content-center">
+                Valores da variável
+            </div>
+            <div class="card-body justify-content-center">
+                @foreach (var valor in ViewModel.RegrasVariavel)
+                {
+                    <p class="card-text">
+                        @valor.Nome - @valor.Valor
+                        <span class="oi oi-trash ml-3" @onclick="() => RemoveRegraVariavel(valor)"></span>
+                    </p>
+                }
+            </div>
+        </div>
+    }
+<div class="row mt-3">
+    <div class="col-md-3">
+        <label for="nome-variavel" class="">Operador lógico</label>
+        <select class="form-control" @bind="ViewModel.Complemento">
+            <option value="">Nenhum</option>
+            <option value="AND">E</option>
+            <option value="OR">OU</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="nome-variavel" class="">Objetivos</label>
+        <select class="form-control" @onchange="GetValoresObjetivo">
+            <option>Nenhum</option>
+            @if (Objetivos.Any())
+            {
+                foreach (var objetivo in Objetivos)
+                {
+                    <option value="@objetivo.Id">@objetivo.Nome</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label for="nome-variavel" class="">Valores</label>
+        <select class="form-control" @bind="ViewModel.ValorVariavelObjetivo">
+            <option>Nenhum</option>
+            @if (Objetivo != null && Objetivo.Valores != null && Objetivo.Valores.Any())
+            {
+                foreach (var valor in Objetivo.Valores)
+                {
+                    <option value="@valor.Valor">@valor.Valor</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+</form>
+<div class="row justify-content-center m-md-4">
+    <button class="btn btn-purple">
+        Adicionar
+    </button>
+</div>
+
+@code {
+    [Parameter] public Action OnRefreshList { get; set; }
+    private RegraViewModelAdd ViewModel = new RegraViewModelAdd();
+    private List<VariavelViewModelGet> Variaveis = new List<VariavelViewModelGet>();
+    private List<VariavelViewModelGet> Objetivos = new List<VariavelViewModelGet>();
+    private VariavelViewModelGet Variavel = new VariavelViewModelGet();
+    private VariavelViewModelGet Objetivo = new VariavelViewModelGet();
+    private string ValorVariavel = null;
+    private string ValorObjetivo = null;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var repsonseGet = (List<VariavelViewModelGet>)await
+                            Service.CallService(ServiceVariavelGet, Enums.EnumTipoSendService.Listar, ViewModel);
+        Variaveis = repsonseGet.Where(x => !x.Objetivo).ToList();
+        Objetivos = repsonseGet.Where(x => x.Objetivo).ToList();
+    }
+
+    private void GetValoresVariavel(ChangeEventArgs even) =>
+        Variavel = Variaveis.Find(x => x.Id.ToString() == even.Value.ToString());
+
+    private void GetValoresObjetivo(ChangeEventArgs even)
+    {
+        Objetivo = Objetivos.Find(x => x.Id.ToString() == even.Value.ToString());
+        ViewModel.IdVariavelObjetivo = Objetivo.Id;
+    }
+
+    private void ChangeValorVariavel(ChangeEventArgs even) => ValorVariavel = even.Value.ToString();
+
+    private void ChangeValorObjetivo(ChangeEventArgs even) => ValorObjetivo = even.Value.ToString();
+
+    private void AddRegraVariavel()
+    {
+        var regraVariavel = new RegraVariavelViewModel { Id = Variavel.Id, Nome = Variavel.Nome, Valor = ValorVariavel };
+        if (Variavel != null && !ViewModel.RegrasVariavel.Contains(regraVariavel))
+            ViewModel.RegrasVariavel.Add(regraVariavel);
+    }
+
+    private void RemoveRegraVariavel(RegraVariavelViewModel value) => ViewModel.RegrasVariavel.Remove(value);
+}

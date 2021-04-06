@@ -2,6 +2,7 @@
 using Dominio.Interfaces.Repositorio;
 using Dominio.Interfaces.Service;
 using Service.Services.ServicesBase;
+using Service.Validators.ValidatorsEntidades;
 using System.Threading.Tasks;
 
 namespace Service.Services
@@ -15,13 +16,15 @@ namespace Service.Services
 
         public new async Task<Regra> AddAsync(Regra entidade)
         {
-            await base.Repositorio.UpdateAsync(entidade);
+            if (!Injector.Validator.Executar(new RegraValidator(), entidade)) return null;
+            await base.AddAsync(entidade);
             return entidade;
         }
 
         public new async Task<Regra> UpdateAsync(Regra entidade)
         {
-            await base.Repositorio.UpdateAsync(entidade);
+            if (!Injector.Validator.Executar(new RegraValidator(), entidade)) return null;
+            await base.UpdateAsync(entidade);
             return entidade;
         }
     }

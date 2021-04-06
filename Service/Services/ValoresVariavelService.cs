@@ -18,8 +18,8 @@ namespace Service.Services
 
         public new async Task<ValoresVariavel> AddAsync(ValoresVariavel entidade)
         {
-            if (!Injector.Validator.Executar(new ValoresVariavelValidator(), entidade) ||
-                await ValidarExistenciaEntidadeAsync(x => entidade.Valor == x.Valor && x.IdVariavel == entidade.IdVariavel))
+            if (!Injector.Validator.Executar(new ValoresVariavelValidator(), entidade)) return null;
+            if (await ValidarExistenciaEntidadeAsync(x => entidade.Valor == x.Valor && x.IdVariavel == entidade.IdVariavel))
             {
                 Injector.Notificador.Add("Valor já existente para esta variável.");
                 return null;
@@ -32,8 +32,8 @@ namespace Service.Services
         {
             var idVariavel = entidade.FirstOrDefault()?.IdVariavel;
             var valores = entidade.Select(x => x.Valor);
-            if (!Injector.Validator.Executar(new ValoresVariavelsValidator(), entidade) ||
-                await ValidarExistenciaEntidadeAsync(x => valores.Contains(x.Valor) && x.IdVariavel == idVariavel))
+            if (!Injector.Validator.Executar(new ValoresVariavelsValidator(), entidade)) return null;
+            if(await ValidarExistenciaEntidadeAsync(x => valores.Contains(x.Valor) && x.IdVariavel == idVariavel))
             {
                 Injector.Notificador.Add("Valor já existente para esta variável.");
                 return null;
@@ -44,6 +44,12 @@ namespace Service.Services
 
         public new async Task<ValoresVariavel> UpdateAsync(ValoresVariavel entidade)
         {
+            if (!Injector.Validator.Executar(new ValoresVariavelValidator(), entidade)) return null;
+            if (await ValidarExistenciaEntidadeAsync(x => entidade.Valor == x.Valor && x.IdVariavel == entidade.IdVariavel))
+            {
+                Injector.Notificador.Add("Valor já existente para esta variável.");
+                return null;
+            }
             await base.Repositorio.UpdateAsync(entidade);
             return entidade;
         }
