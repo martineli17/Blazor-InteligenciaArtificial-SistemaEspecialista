@@ -1,5 +1,79 @@
-﻿<h3>_ListRegra</h3>
+﻿@using BlazorApp.ViewModels.ModelsRegra
+@using BlazorApp.ViewModels.Base
+@using Crosscuting.Extensions
+@inject BlazorApp.Services.ServicesRegra.RegraServiceAplicacaoGet ServiceGet
+@inject BlazorApp.Services.ServicesRegra.RegraServiceAplicacaoRemove ServiceRemove
+
+@if (RegrasCadastradas != null && RegrasCadastradas.Any())
+{
+    <div class="card text-center m-md-4">
+        <div class="card-body">
+            <h5 class="card-title font-weight-bolder">Regras</h5>
+            <table class="table table-hover table-responsive-md table-borderless">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Objetivo</th>
+                        <th>Valor</th>
+                        <th>Variáveis</th>
+                        <th>Complemento</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var regra in RegrasCadastradas)
+                    {
+
+                    <tr>
+                        <td title="@regra.VariavelObjetivo?.Nome">@regra.VariavelObjetivo?.Nome?.TrySubstring(30)</td>
+                        <td>@regra.ValorVariavelObjetivo</td>
+                        <td>
+                            <select class="form-control">
+                                @if (regra.RegrasVariavel != null && regra.RegrasVariavel.Any())
+                                {
+                                    foreach (var variavel in regra.RegrasVariavel)
+                                    {
+                                        <option>@($"{variavel.Variavel?.Nome} - {variavel.ValorVariavel}")</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option>Nenhum</option>
+                                }
+                            </select>
+                        </td>
+                        <td>@regra.Complemento</td>
+                        <td>
+                            <span title="Remover" @onclick="() => DeleteAsync(regra.Id)"
+                                  class="oi oi-trash text-center oi-align-center"></span>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
 
 @code {
+    [Parameter] public bool Atualizar { get; set; }
+    List<RegraViewModelGet> RegrasCadastradas = null;
+
+    protected override Task OnParametersSetAsync() => GetRegras();
+
+    protected override Task OnInitializedAsync() => GetRegras();
+
+    private async Task DeleteAsync(Guid id)
+    {
+        if ((bool)await Service.CallService(ServiceRemove, Enums.EnumTipoSendService.Excluir,
+                                new BaseRemoveViewModel { Id = id }))
+        {
+            await GetRegras();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetRegras() =>
+    RegrasCadastradas = (List<RegraViewModelGet>)
+            await (Service.CallService(ServiceGet, Enums.EnumTipoSendService.Listar));
 
 }

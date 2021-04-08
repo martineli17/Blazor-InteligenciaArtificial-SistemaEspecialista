@@ -3,8 +3,6 @@ using BlazorApp.ViewModels.Base;
 using BlazorApp.ViewModels.ModelsVariavel;
 using Dominio.Entidades;
 using Dominio.Interfaces.Service;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BlazorApp.Services.ServicesVariavel
@@ -21,15 +19,8 @@ namespace BlazorApp.Services.ServicesVariavel
         public async Task<object> SendService(IBaseViewModel model = null)
         {
             var modelCast = (VariavelViewModelAdd)model;
-            var entidadeSalva = await Service.AddAsync(base.Injector.Mapper.Map<Variavel>(modelCast));
-            var valores = modelCast.ValoresDaVariavel.Select(x =>
-                        new ValoresVariavel
-                        {
-                            Valor = x,
-                            IdProjeto = Injector.ProjetoSelecionado.IdProjetoSelecionado,
-                            IdVariavel = entidadeSalva.Id
-                        });
-            await _valoresVariavelService.AddAsync(valores);
+            var entidade = base.Injector.Mapper.Map<Variavel>(modelCast);
+            await Service.AddAsync(entidade);
             return Injector.Notificador.IsValido();
         }
     }

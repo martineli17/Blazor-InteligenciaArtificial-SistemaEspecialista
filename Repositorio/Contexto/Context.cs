@@ -13,6 +13,8 @@ namespace Repositorio.Contexto
         public DbSet<Variavel> Variavel { get; set; }
         public DbSet<ValoresVariavel> ValoresVariavel { get; set; }
         public DbSet<Projeto> Projeto { get; set; }
+        public DbSet<Regra> Regra { get; set; }
+        public DbSet<RegraVariavel> RegraVariavel { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

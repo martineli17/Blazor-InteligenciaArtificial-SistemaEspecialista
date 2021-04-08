@@ -1,15 +1,15 @@
 ﻿@page "/regra"
 <Cabecalho NomeAba="Regras" />
-<_Novo />
+<_Novo OnRefreshList="RefreshListagem" />
 <hr />
-<_ListRegra />
+<_ListRegra Atualizar="AtualizarListagemRegras"/>
 
 @code {
-    private bool AtualizarListagem;
+    private bool AtualizarListagemRegras;
 
     private void RefreshListagem()
     {
-        AtualizarListagem = !AtualizarListagem;
+        AtualizarListagemRegras = !AtualizarListagemRegras;
         StateHasChanged();
     }
 }

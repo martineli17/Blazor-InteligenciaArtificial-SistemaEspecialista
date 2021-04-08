@@ -13,6 +13,7 @@ using Service.Services.ServicesBase;
 using Service.Validators.ValidadorBase;
 using System;
 using BlazorApp.Services.ServicesVariavel;
+using BlazorApp.Services.ServicesRegra;
 
 namespace BlazorApp.Configuracoes
 {
@@ -31,8 +32,8 @@ namespace BlazorApp.Configuracoes
             service.TryAddTransient<IProjetoRepositorio, ProjetoRepositorio>();
             service.TryAddTransient<IVariavelRepositorio, VariavelRepositorio>();
             service.TryAddTransient<IValoresVariavelRepositorio, ValoresVariavelRepositorio>();
-            service.TryAddTransient<IRegraService, RegraService>();
-            service.TryAddTransient<IRegraVariavelService, RegraVariavelService>();
+            service.TryAddTransient<IRegraRepositorio, RegraRepositorio>();
+            service.TryAddTransient<IRegraVariavelRepositorio, RegraVariavelRepositorio>();
             #endregion
 
             #region Services
@@ -62,6 +63,9 @@ namespace BlazorApp.Configuracoes
             #endregion
 
             #region Regra
+            service.TryAddTransient<RegraServiceAplicacaoAdd>();
+            service.TryAddTransient<RegraServiceAplicacaoGet>();
+            service.TryAddTransient<RegraServiceAplicacaoRemove>();
             #endregion
 
             #endregion

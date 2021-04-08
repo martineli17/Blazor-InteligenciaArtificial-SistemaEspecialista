@@ -1,6 +1,7 @@
 ﻿@using BlazorApp.ViewModels.ModelsRegra
 @using BlazorApp.ViewModels.ModelsVariavel
 @inject BlazorApp.Services.ServicesVariavel.VariavelServiceAplicacaoGet ServiceVariavelGet
+@inject BlazorApp.Services.ServicesRegra.RegraServiceAplicacaoAdd ServiceRegraAdd
 
 <form>
     <div class="row">
@@ -18,7 +19,7 @@
             </select>
         </div>
         <div class="col-md-3">
-            <label for="nome-variavel" class="">Valores</label>
+            <label for="nome-variavel" class="">Valor</label>
             <select class="form-control" @bind="ValorVariavel">
                 <option>Nenhum</option>
                 @if (Variavel != null && Variavel.Valores != null && Variavel.Valores.Any())
@@ -63,7 +64,7 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label for="nome-variavel" class="">Objetivos</label>
+        <label for="nome-variavel" class="">Objetivo</label>
         <select class="form-control" @onchange="GetValoresObjetivo">
             <option>Nenhum</option>
             @if (Objetivos.Any())
@@ -76,7 +77,7 @@
         </select>
     </div>
     <div class="col-md-3">
-        <label for="nome-variavel" class="">Valores</label>
+        <label for="nome-variavel" class="">Valor</label>
         <select class="form-control" @bind="ViewModel.ValorVariavelObjetivo">
             <option>Nenhum</option>
             @if (Objetivo != null && Objetivo.Valores != null && Objetivo.Valores.Any())
@@ -91,7 +92,7 @@
 </div>
 </form>
 <div class="row justify-content-center m-md-4">
-    <button class="btn btn-purple">
+    <button class="btn btn-purple" @onclick="() => AddRegra()">
         Adicionar
     </button>
 </div>
@@ -130,9 +131,15 @@
     private void AddRegraVariavel()
     {
         var regraVariavel = new RegraVariavelViewModel { Id = Variavel.Id, Nome = Variavel.Nome, Valor = ValorVariavel };
-        if (Variavel != null && !ViewModel.RegrasVariavel.Contains(regraVariavel))
+        if (Variavel != null && !ViewModel.RegrasVariavel.Any(x => x.Id == regraVariavel.Id && x.Valor == regraVariavel.Valor))
             ViewModel.RegrasVariavel.Add(regraVariavel);
     }
 
     private void RemoveRegraVariavel(RegraVariavelViewModel value) => ViewModel.RegrasVariavel.Remove(value);
+
+    private async Task AddRegra()
+    {
+        if ((bool)await Service.CallService(ServiceRegraAdd, Enums.EnumTipoSendService.Adicionar, ViewModel))
+            OnRefreshList.Invoke();
+    }
 }

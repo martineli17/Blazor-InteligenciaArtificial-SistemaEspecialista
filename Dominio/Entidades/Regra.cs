@@ -6,7 +6,7 @@ namespace Dominio.Entidades
 {
     public class Regra : BaseProjeto
     {
-        public IEnumerable<RegraVariavel> RegrasVariavel { get; set; }
+        public ICollection<RegraVariavel> RegrasVariavel { get; set; }
         public Guid IdVariavelObjetivo { get; set; }
         public Variavel VariavelObjetivo { get; set; }
         public string ValorVariavelObjetivo { get; set; }
