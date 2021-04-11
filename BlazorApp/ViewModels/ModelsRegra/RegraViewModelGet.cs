@@ -1,10 +1,25 @@
-﻿using BlazorApp.ViewModels.ModelsVariavel;
-using Dominio.ValuesType;
+﻿using BlazorApp.ViewModels.Base;
+using BlazorApp.ViewModels.ModelsVariavel;
 using System;
 using System.Collections.Generic;
 
 namespace BlazorApp.ViewModels.ModelsRegra
 {
+    public class RegraViewModelFiltroGet : IBaseViewModel
+    {
+        public int Skip { get; set; } = 0;
+        public int Take { get; set; } = int.MaxValue;
+        public int GetSkip() => (Skip > 0) ? (Skip - 1) * Take : 0;
+        public RegraViewModelFiltroGet()
+        {
+
+        }
+        public RegraViewModelFiltroGet(int take)
+        {
+            Take = take;
+        }
+    }
+
     public class RegraViewModelGet
     {
         public Guid Id { get; set; }

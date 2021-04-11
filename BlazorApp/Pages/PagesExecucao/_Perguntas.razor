@@ -1,0 +1,140 @@
+﻿@using BlazorApp.ViewModels.ModelsRegra
+@using BlazorApp.ViewModels.ModelsValoresVariavel
+@using Crosscuting.Extensions
+@using Newtonsoft.Json
+@inject BlazorApp.Services.ServicesRegra.RegraServiceAplicacaoGet ServiceGet
+@inject BlazorApp.Services.ServicesRegra.RegraServiceAplicacaoCount ServiceCount
+@inject BlazorApp.Services.ServicesRegra.RegraServiceAplicacaoResultado ServiceResultado
+
+<div class="mt-lg-5">
+    @if (RegraEmAnalise != null)
+    {
+        <div class="alert alert-light" role="alert" hidden="@MotivoPerguntaHidden">
+            <h5>Motivo da pergunta</h5>
+            @RegraEmAnalise.Variavel.MotivoPergunta
+        </div>
+    }
+    <div class="card">
+        <div class="card-header justify-content-center">
+            @if (Finalizado)
+            {
+                <span>Finalizado</span>
+            }
+            else
+            {
+                <span>Pergunta @(TotalRespondido+1)</span>
+            }
+        </div>
+        <div class="card-body">
+            <p class="card-text">@(RegraEmAnalise is null || Finalizado ? "Nenhum dado foi carregado." : RegraEmAnalise.Variavel.Pergunta) </p>
+            @if (RegraEmAnalise != null && !Finalizado)
+            {
+                @foreach (var item in RegraEmAnalise.Variavel.Valores)
+                {
+                    var id = Guid.NewGuid();
+                    <div>
+                        <input class="form-control" type="checkbox" @onclick="() => MarcarResposta(item.Valor, item.IdVariavel)">
+                        <label class="form-check-label">
+                            @item.Valor
+                        </label>
+                    </div>
+                }
+            }
+        </div>
+        <div class="card-footer text-muted">
+            <button class="btn btn-primary" @onclick="() => ViewMotivoPergunta()">@TextoMotivoPerguntaHidden</button>
+            @if (Respondeu)
+            {
+                <button class="btn btn-success" @onclick="() => ProximaRegra()">Avançar</button>
+            }
+            else
+            {
+                <button class="btn btn-success">Aguardando resposta</button>
+            }
+        </div>
+    </div>
+</div>
+@if (Finalizado)
+{
+    <_Resultado RegrasRespondidas="RegrasRespondidas" />
+}
+
+@code{
+    Guid IdPrimeiraRegra = Guid.Empty;
+    Guid IdUltimaRegra = Guid.NewGuid();
+    string MotivoPerguntaHidden = "hidden";
+    string TextoMotivoPerguntaHidden = "Visualizar motivo";
+    int TotalRegrasBuscadas = 0;
+    int TotalRegrasCadastradas = 0;
+    int TotalRespondido = 0;
+    bool Finalizado = false;
+    bool Respondeu = false;
+    RegraViewModelGet Regra = null;
+    RegraVariavelViewModelGet RegraEmAnalise = null;
+    RegraViewModelRespostaCollection RegrasRespondidas = new RegraViewModelRespostaCollection();
+    RegraViewModelFiltroGet Filtro = new RegraViewModelFiltroGet(1);
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        TotalRegrasCadastradas = (int)await (Service.CallService(ServiceCount, Enums.EnumTipoSendService.Listar, Filtro));
+        GetRegras();
+    }
+
+    private void ViewMotivoPergunta()
+    {
+        if (MotivoPerguntaHidden == "hidden")
+        {
+            MotivoPerguntaHidden = null;
+            TextoMotivoPerguntaHidden = "Fechar motivo";
+        }
+        else
+        {
+            MotivoPerguntaHidden = "hidden";
+            TextoMotivoPerguntaHidden = "Visualizar motivo";
+        }
+    }
+
+    private void ProximaRegra()
+    {
+        if (VerificarSeTodasRegrasForamRespondidas()) GetRegras();
+        else RegraEmAnalise = Regra.RegrasVariavel.Skip(TotalRespondido).Take(1).FirstOrDefault();
+        Respondeu = false;
+        TotalRespondido++;
+    }
+
+    private async void GetRegras()
+    {
+        Finalizado = TotalRegrasBuscadas > 1 && TotalRegrasCadastradas <= TotalRegrasBuscadas;
+        if (Finalizado) return;
+        TotalRegrasBuscadas++;
+        Filtro.Skip = TotalRegrasBuscadas;
+        var RegrasCadastradas = (List<RegraViewModelGet>)await (Service.CallService(ServiceGet, Enums.EnumTipoSendService.Listar, Filtro));
+        Regra = RegrasCadastradas.FirstOrDefault();
+        if (Regra != null)
+        {
+            RegraEmAnalise = Regra.RegrasVariavel.FirstOrDefault();
+            RegrasRespondidas.ViewModelGet.Add(Regra);
+            if (TotalRegrasBuscadas > 1 && VerificarSeTodasRegrasForamRespondidas()) GetRegras();
+        }
+    }
+
+    private void MarcarResposta(string valor, Guid idVariavel)
+    {
+        Respondeu = true;
+        var resposta = new RegraViewModelValidar { IdVariavel = idVariavel, IdRegra = Regra.Id, ValorVariavel = valor };
+        if (!RegrasRespondidas.Respostas.Any(x => x.IdVariavel == resposta.IdVariavel && x.ValorVariavel == resposta.ValorVariavel && x.IdRegra == x.IdRegra))
+            RegrasRespondidas.Respostas.Add(new RegraViewModelValidar { IdVariavel = idVariavel, IdRegra = Regra.Id, ValorVariavel = valor });
+        else
+        {
+            if(RegrasRespondidas.Respostas.Any(x => x.IdVariavel == resposta.IdVariavel && x.ValorVariavel == resposta.ValorVariavel && x.IdRegra == x.IdRegra))
+                RegrasRespondidas.Respostas.Remove(RegrasRespondidas.Respostas.First(x => x.IdVariavel == resposta.IdVariavel && x.ValorVariavel == resposta.ValorVariavel && x.IdRegra == x.IdRegra));
+        }
+        Respondeu = RegrasRespondidas.Respostas.Any(x => x.IdVariavel == resposta.IdVariavel && x.IdRegra == x.IdRegra);
+    }
+
+    private bool VerificarSeTodasRegrasForamRespondidas()
+    {
+        return Regra.RegrasVariavel.ToList().TrueForAll(x => RegrasRespondidas.Respostas.Any(r => r.IdVariavel == x.IdVariavel));
+    }
+}

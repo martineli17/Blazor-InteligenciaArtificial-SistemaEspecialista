@@ -1,6 +1,7 @@
 ﻿using BlazorApp.Services.Base;
 using BlazorApp.ViewModels.Base;
 using BlazorApp.ViewModels.ModelsRegra;
+using Crosscuting.Extensions;
 using Dominio.Interfaces.Service;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +17,12 @@ namespace BlazorApp.Services.ServicesRegra
 
         public async Task<object> SendService(IBaseViewModel model = null)
         {
+            var modelCast = (RegraViewModelFiltroGet)model;
             var regrasCadastradas = await Service.GetWithIncludesAsync();
-            return Injector.Mapper.Map<IEnumerable<RegraViewModelGet>>(regrasCadastradas
-                                             .Where(x => x.IdProjeto == IdProjetoSelecionado));
+            regrasCadastradas = regrasCadastradas.Where(x => x.IdProjeto == IdProjetoSelecionado);
+            if (modelCast != null)
+                regrasCadastradas = regrasCadastradas.Skip(modelCast.GetSkip()).Take(modelCast.Take);
+            return Injector.Mapper.Map<IEnumerable<RegraViewModelGet>>(regrasCadastradas);
         }
     }
 }

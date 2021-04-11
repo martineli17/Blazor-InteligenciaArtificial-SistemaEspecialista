@@ -17,7 +17,7 @@ namespace BlazorApp.Mappers
                             IdProjeto = src.IdProjeto,
                             IdVariavel = dest.Id
                         }).ToList()));
-            CreateMap<Variavel, VariavelViewModelGet>();
+            CreateMap<Variavel, VariavelViewModelGet>().ReverseMap();
         }
     }
 }

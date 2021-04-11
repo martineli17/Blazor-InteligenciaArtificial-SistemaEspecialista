@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using BlazorApp.ViewModels.ModelsRegra;
+using Crosscuting.Extensions;
 using Dominio.Entidades;
 using Dominio.ValuesType;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BlazorApp.Mappers
@@ -20,9 +23,11 @@ namespace BlazorApp.Mappers
                             ValorVariavel = x.Valor
                         }).ToList()));
 
-            CreateMap<RegraVariavel, RegraVariavelViewModelGet>();
+            CreateMap<RegraVariavel, RegraVariavelViewModelGet>().ReverseMap();
             CreateMap<Regra, RegraViewModelGet>()
-                .ForMember(dest => dest.Complemento, options => options.MapFrom(src => src.Complemento.HasValue ? src.Complemento == EnumTipoComplemento.AND ? "E" : "OU" : null ));
+                               .ForMember(dest => dest.Complemento, options => options.MapFrom(src => src.Complemento == EnumTipoComplemento.AND ? "Todas" : "Mínimo uma"));
+            CreateMap<RegraViewModelGet, Regra>()
+               .ForMember(dest => dest.Complemento, options => options.MapFrom(src => src.Complemento == "Mínimo uma" ? EnumTipoComplemento.OR : EnumTipoComplemento.AND));
         }
     }
 }

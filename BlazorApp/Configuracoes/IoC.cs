@@ -66,6 +66,8 @@ namespace BlazorApp.Configuracoes
             service.TryAddTransient<RegraServiceAplicacaoAdd>();
             service.TryAddTransient<RegraServiceAplicacaoGet>();
             service.TryAddTransient<RegraServiceAplicacaoRemove>();
+            service.TryAddTransient<RegraServiceAplicacaoResultado>();
+            service.TryAddTransient<RegraServiceAplicacaoCount>();
             #endregion
 
             #endregion

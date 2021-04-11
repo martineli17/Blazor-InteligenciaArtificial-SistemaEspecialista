@@ -8,7 +8,7 @@ namespace BlazorApp.Mappers
     {
         public ValoresVariavelMapper()
         {
-            CreateMap<ValoresVariavel, ValoresVariavelViewModelGet>();
+            CreateMap<ValoresVariavel, ValoresVariavelViewModelGet>().ReverseMap();
         }
     }
 }

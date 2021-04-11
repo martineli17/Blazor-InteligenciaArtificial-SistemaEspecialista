@@ -20,9 +20,11 @@ namespace Repositorio.Repositorios
         {
             var query = Context.Variavel.AsQueryable();
             if (filter != null)
-                return Task.FromResult(Context.Regra.Where(filter).Include(x => x.RegrasVariavel).ThenInclude(x => x.Variavel).Include(x => x.VariavelObjetivo).AsQueryable());
+                return Task.FromResult(Context.Regra.Where(filter).Include(x => x.RegrasVariavel)
+                    .ThenInclude(x => x.Variavel).ThenInclude(x => x.Valores).Include(x => x.VariavelObjetivo).AsQueryable());
             else
-                return Task.FromResult(Context.Regra.Include(x => x.RegrasVariavel).ThenInclude(x => x.Variavel).Include(x => x.VariavelObjetivo).AsQueryable());
+                return Task.FromResult(Context.Regra.Include(x => x.RegrasVariavel).ThenInclude(x => x.Variavel)
+                    .ThenInclude(x => x.Valores).Include(x => x.VariavelObjetivo).AsQueryable());
         }
     }
 }

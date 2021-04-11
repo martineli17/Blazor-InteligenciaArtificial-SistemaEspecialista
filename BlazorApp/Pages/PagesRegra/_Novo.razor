@@ -54,42 +54,44 @@
             </div>
         </div>
     }
-<div class="row mt-3">
-    <div class="col-md-3">
-        <label for="nome-variavel" class="">Operador lógico</label>
-        <select class="form-control" @bind="ViewModel.Complemento">
-            <option value="">Nenhum</option>
-            <option value="AND">E</option>
-            <option value="OR">OU</option>
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="nome-variavel" class="">Objetivo</label>
-        <select class="form-control" @onchange="GetValoresObjetivo">
-            <option>Nenhum</option>
-            @if (Objetivos.Any())
-            {
-                foreach (var objetivo in Objetivos)
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <label for="nome-variavel" class="">Acertar</label>
+            <select class="form-control" @bind="ViewModel.Complemento">
+                <option value="OR">No mínimo uma</option>
+                @if (ViewModel.RegrasVariavel.Count() > 1)
                 {
-                    <option value="@objetivo.Id">@objetivo.Nome</option>
+                    <option value="AND">Todas</option>
                 }
-            }
-        </select>
-    </div>
-    <div class="col-md-3">
-        <label for="nome-variavel" class="">Valor</label>
-        <select class="form-control" @bind="ViewModel.ValorVariavelObjetivo">
-            <option>Nenhum</option>
-            @if (Objetivo != null && Objetivo.Valores != null && Objetivo.Valores.Any())
-            {
-                foreach (var valor in Objetivo.Valores)
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="nome-variavel" class="">Objetivo</label>
+            <select class="form-control" @onchange="GetValoresObjetivo">
+                <option>Nenhum</option>
+                @if (Objetivos.Any())
                 {
-                    <option value="@valor.Valor">@valor.Valor</option>
+                    foreach (var objetivo in Objetivos)
+                    {
+                        <option value="@objetivo.Id">@objetivo.Nome</option>
+                    }
                 }
-            }
-        </select>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="nome-variavel" class="">Valor</label>
+            <select class="form-control" @bind="ViewModel.ValorVariavelObjetivo">
+                <option>Nenhum</option>
+                @if (Objetivo != null && Objetivo.Valores != null && Objetivo.Valores.Any())
+                {
+                    foreach (var valor in Objetivo.Valores)
+                    {
+                        <option value="@valor.Valor">@valor.Valor</option>
+                    }
+                }
+            </select>
+        </div>
     </div>
-</div>
 </form>
 <div class="row justify-content-center m-md-4">
     <button class="btn btn-purple" @onclick="() => AddRegra()">
@@ -121,6 +123,7 @@
     private void GetValoresObjetivo(ChangeEventArgs even)
     {
         Objetivo = Objetivos.Find(x => x.Id.ToString() == even.Value.ToString());
+        if (Objetivo is null) return;
         ViewModel.IdVariavelObjetivo = Objetivo.Id;
     }
 
@@ -140,6 +143,9 @@
     private async Task AddRegra()
     {
         if ((bool)await Service.CallService(ServiceRegraAdd, Enums.EnumTipoSendService.Adicionar, ViewModel))
+        {
+            ViewModel.RegrasVariavel.Clear();
             OnRefreshList.Invoke();
+        }
     }
 }

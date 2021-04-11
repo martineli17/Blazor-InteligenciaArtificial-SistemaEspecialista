@@ -1,0 +1,40 @@
+﻿@using BlazorApp.ViewModels.ModelsRegra
+@using Crosscuting.Extensions
+@inject BlazorApp.Services.ServicesRegra.RegraServiceAplicacaoResultado ServiceResultado
+
+@if (ResultadoGerado && Resultados.HasValue())
+{
+    <div class="alert alert-success mt-5" role="alert">
+        <h5>Análise finalizada =)</h5>
+        <ul>
+            @foreach (var resultado in Resultados)
+            {
+                <li>Para <b>'@resultado.NomeObjetivo'</b> o resultado gerado foi <b>'@resultado.ValorObjetivo'</b></li>
+            }
+        </ul>
+    </div>
+}
+else if (ResultadoGerado && !Resultados.HasValue())
+{
+    <div class="alert alert-danger mt-5" role="alert">
+        <h5>Análise finalizada =(</h5>
+        <span>Nenhum resultado foi encontrado para suas respostas</span>
+    </div>
+}
+
+@code{
+    [Parameter] public RegraViewModelRespostaCollection RegrasRespondidas { get; set; }
+    IReadOnlyCollection<RegraViewModelResultado> Resultados = null;
+    bool ResultadoGerado = false;
+    protected override async Task OnParametersSetAsync()
+    {
+        await GerarResultados();
+        StateHasChanged();
+    }
+    private async Task GerarResultados()
+    {
+        Resultados = (IReadOnlyCollection<RegraViewModelResultado>)
+                   await (Service.CallService(ServiceResultado, Enums.EnumTipoSendService.Listar, RegrasRespondidas));
+        ResultadoGerado = true;
+    }
+}
