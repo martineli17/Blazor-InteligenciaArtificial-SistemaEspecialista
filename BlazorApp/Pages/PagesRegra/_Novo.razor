@@ -145,6 +145,7 @@
         if ((bool)await Service.CallService(ServiceRegraAdd, Enums.EnumTipoSendService.Adicionar, ViewModel))
         {
             ViewModel.RegrasVariavel.Clear();
+            ViewModel.Complemento = Dominio.ValuesType.EnumTipoComplemento.OR;
             OnRefreshList.Invoke();
         }
     }
