@@ -15,5 +15,5 @@
 ## Ojetivo
 #### O intuito dessa aplicação é implementar um sistema especialista, dentro do contexto de IA. Nele, é possível criar 1 ou N sistemas especialistas e suas respectivas características e, no final, iniciar o sistema para que o mesmo tente conseguir, com base nas respostas e regras inseridas, chegar à uma análise correta do problema apresentado.
 
-##Tecnologia: 
-#### Blazor WebAssembly e .NET Core.
+##### Tecnologias: 
+##### Blazor WebAssembly e .NET Core.
