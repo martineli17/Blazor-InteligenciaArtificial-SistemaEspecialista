@@ -17,9 +17,9 @@
 
 ## Como usar
 #### > Primeiro, crie um projeto e o selecione
-#### > Vá até a aba de Variáveis. Nela, você irá inserir as variáveis do sistema, as perguntas correspondentes à elas e as opções de valores (caso não for objetivo) ou opções de resultado (caso for objetivo).
-#### > Na aba de Regras, você irá associar as variáveis que não são objetivas com as que são objetivas, ou seja, você irá demonstrar quais valores de variáveis (não objetivas) resultam em um resultado (que são as variáveis objetivas).
-#### > Na aba de iniciar, você irá iniciar o sistema especialista, onde perguntas irão ser feitas e possíveis respostas poderão ser escolhidas.
+#### > Vá até a aba de 'Variáveis'. Nela, você irá inserir as variáveis do sistema, as perguntas correspondentes à elas e as opções de valores (caso não for objetivo) ou opções de resultado (caso for objetivo).
+#### > Na aba de 'Regras', você irá associar as variáveis que não são objetivas com as que são objetivas, ou seja, você irá demonstrar quais valores de variáveis (não objetivas) resultam em um resultado (que são as variáveis objetivas).
+#### > Na aba de 'Iniciar', você irá iniciar o sistema especialista, onde perguntas irão ser feitas e possíveis respostas poderão ser escolhidas.
 #### > No final, irá mostrar o resultado da análise.
 
 ##### Tecnologias: 
