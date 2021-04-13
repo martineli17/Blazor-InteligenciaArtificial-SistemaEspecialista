@@ -7,9 +7,9 @@
     <div class="alert alert-success mt-5" role="alert">
         <h5>Análise finalizada =)</h5>
         <ul>
-            @foreach (var resultado in Resultados)
+            @foreach (var resultado in Resultados.GroupBy(x => x.ValorObjetivo).OrderByDescending(x => x.Count()))
             {
-                <li>Para <b>'@resultado.NomeObjetivo'</b> o resultado gerado foi <b>'@resultado.ValorObjetivo'</b></li>
+                <li>'@resultado.First().ValorObjetivo' | @resultado.Count() pontos</li>
             }
         </ul>
     </div>

@@ -45,7 +45,7 @@
                 }
                 @if (Respondeu)
                 {
-                    <p class="card-text">Marcadas: @(string.Join(",",RegrasRespondidas.Respostas.Where(x => RegraEmAnalise.Variavel.Valores.Select(v => v.Valor).Contains(x.ValorVariavel)).Select(x => x.ValorVariavel))) </p>
+                    <p class="card-text">Marcadas: @(string.Join(",", RespostasEmAnalise)) </p>
                 }
             }
         </div>
@@ -79,6 +79,7 @@
     RegraVariavelViewModelGet RegraEmAnalise = null;
     RegraViewModelRespostaCollection RegrasRespondidas = new RegraViewModelRespostaCollection();
     RegraViewModelFiltroGet Filtro = new RegraViewModelFiltroGet(1);
+    List<string> RespostasEmAnalise = new List<string>();
 
 
     protected override async Task OnInitializedAsync()
@@ -107,6 +108,7 @@
         else RegraEmAnalise = Regra.RegrasVariavel.Skip(TotalRespondido).Take(1).FirstOrDefault();
         Respondeu = false;
         TotalRespondido++;
+        RespostasEmAnalise.Clear();
     }
 
     private async void GetRegras()
@@ -129,7 +131,10 @@
     {
         var resposta = new RegraViewModelValidar { IdVariavel = idVariavel, IdRegra = Regra is null ? Guid.Empty : Regra.Id, ValorVariavel = valor };
         if (!RegrasRespondidas.Respostas.Any(x => x.IdVariavel == resposta.IdVariavel && x.ValorVariavel == resposta.ValorVariavel && x.IdRegra == x.IdRegra))
+        {
             RegrasRespondidas.Respostas.Add(new RegraViewModelValidar { IdVariavel = idVariavel, IdRegra = Regra.Id, ValorVariavel = valor });
+            RespostasEmAnalise.Add(valor);
+        }
         Respondeu = RegrasRespondidas.Respostas.Any(x => x.IdVariavel == resposta.IdVariavel && x.IdRegra == x.IdRegra);
     }
 
@@ -137,7 +142,10 @@
     {
         var resposta = new RegraViewModelValidar { IdVariavel = idVariavel, IdRegra = Regra is null ? Guid.Empty : Regra.Id, ValorVariavel = valor };
         if (RegrasRespondidas.Respostas.Any(x => x.IdVariavel == resposta.IdVariavel && x.ValorVariavel == resposta.ValorVariavel))
+        {
             RegrasRespondidas.Respostas.Remove(RegrasRespondidas.Respostas.First(x => x.IdVariavel == resposta.IdVariavel && x.ValorVariavel == resposta.ValorVariavel && x.IdRegra == x.IdRegra));
+            RespostasEmAnalise.Remove(valor);
+        }
         Respondeu = RegrasRespondidas.Respostas.Any(x => x.IdVariavel == resposta.IdVariavel && x.IdRegra == x.IdRegra);
     }
 

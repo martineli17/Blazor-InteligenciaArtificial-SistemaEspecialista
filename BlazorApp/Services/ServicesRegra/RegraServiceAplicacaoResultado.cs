@@ -1,6 +1,7 @@
 ﻿using BlazorApp.Services.Base;
 using BlazorApp.ViewModels.Base;
 using BlazorApp.ViewModels.ModelsRegra;
+using Crosscuting.Extensions;
 using Dominio.Entidades;
 using Dominio.Interfaces.Service;
 using System.Collections.Generic;
@@ -28,14 +29,9 @@ namespace BlazorApp.Services.ServicesRegra
                             .Select(x => (x.IdVariavel, x.ValorVariavel))))
                 {
                     var listaVariaveis = modelCast.ViewModelGet.Where(x => x.Id == entidade.Id).SelectMany(x => x.RegrasVariavel);
-                    resultadosGerados.Add(new RegraViewModelResultado(listaVariaveis, entidade.ValorVariavelObjetivo, entidade.VariavelObjetivo.Nome));
+                    resultadosGerados.Add(new RegraViewModelResultado(entidade.ValorVariavelObjetivo, entidade.VariavelObjetivo.Nome));
                 }
             }
-            //var resultadoExato = resultadosGerados.Where
-            //    (rg => modelCast.Respostas.Any
-            //    (mc => rg.Variaveis.Any
-            //    (v => v.IdVariavel == mc.IdVariavel && v.ValorVariavel == mc.ValorVariavel)));
-            //if (resultadoExato.Any()) return resultadoExato.ToList();
             return resultadosGerados;
         }
     }

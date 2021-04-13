@@ -21,7 +21,7 @@
         <div class="col-md-3">
             <label for="nome-variavel" class="">Valor</label>
             <select class="form-control" @bind="ValorVariavel">
-                <option>Nenhum</option>
+                <option selected>Nenhum</option>
                 @if (Variavel != null && Variavel.Valores != null && Variavel.Valores.Any())
                 {
                     foreach (var valor in Variavel.Valores)
@@ -68,7 +68,7 @@
         <div class="col-md-3">
             <label for="nome-variavel" class="">Objetivo</label>
             <select class="form-control" @onchange="GetValoresObjetivo">
-                <option>Nenhum</option>
+                <option selected>Nenhum</option>
                 @if (Objetivos.Any())
                 {
                     foreach (var objetivo in Objetivos)
@@ -81,7 +81,7 @@
         <div class="col-md-3">
             <label for="nome-variavel" class="">Valor</label>
             <select class="form-control" @bind="ViewModel.ValorVariavelObjetivo">
-                <option>Nenhum</option>
+                <option selected>Nenhum</option>
                 @if (Objetivo != null && Objetivo.Valores != null && Objetivo.Valores.Any())
                 {
                     foreach (var valor in Objetivo.Valores)

@@ -11,16 +11,15 @@ namespace BlazorApp.ViewModels.ModelsRegra
     }
     public class RegraViewModelResultado
     {
-        public RegraViewModelResultado(IEnumerable<RegraVariavelViewModelGet> variaveis, string valorObjetivo, string nomeObjetivo)
+        public RegraViewModelResultado(string valorObjetivo, string nomeObjetivo)
         {
             ValorObjetivo = valorObjetivo;
             NomeObjetivo = nomeObjetivo;
-            Variaveis = variaveis;
         }
 
         public string ValorObjetivo { get; set; }
         public string NomeObjetivo { get; set; }
-        public IEnumerable<RegraVariavelViewModelGet> Variaveis { get; set; }
+        public int Ponto { get; set; }
 
     }
     public class RegraViewModelValidar
