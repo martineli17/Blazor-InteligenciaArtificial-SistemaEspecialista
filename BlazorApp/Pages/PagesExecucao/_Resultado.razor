@@ -6,12 +6,18 @@
 {
     <div class="alert alert-success mt-5" role="alert">
         <h5>Análise finalizada =)</h5>
-        <ul>
-            @foreach (var resultado in Resultados.GroupBy(x => x.ValorObjetivo).OrderByDescending(x => x.Count()))
-            {
-                <li>'@resultado.First().ValorObjetivo' | @resultado.Count() pontos</li>
-            }
-        </ul>
+
+        @foreach (var objetivo in Resultados.GroupBy(x => x.NomeObjetivo).ToList())
+        {
+            <hr />
+            <p><b>@objetivo.Key</b></p>
+            <ul>
+                @foreach (var resultado in Resultados.Where(x => x.NomeObjetivo == objetivo.Key).GroupBy(x => x.ValorObjetivo).OrderByDescending(x => x.Count()))
+                {
+                    <li>@resultado.First().ValorObjetivo | @resultado.Count() pontos</li>
+                }
+            </ul>
+        }
     </div>
 }
 else if (ResultadoGerado && !Resultados.HasValue())
